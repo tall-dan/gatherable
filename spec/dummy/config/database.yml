@@ -1,0 +1,11 @@
+development: &development
+  adapter: postgresql
+  encoding: unicode
+  database: gatherable_development
+  pool: 5
+  username: gatherable
+  password:
+
+test: &test
+  <<: *development
+  database: gatherable_test

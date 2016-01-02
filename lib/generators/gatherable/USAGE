@@ -1,0 +1,16 @@
+Uses:
+   --------------------------------------
+
+    rails generate gatherable initialize
+
+    This will create:
+        config/initializers/gatherable.rb
+
+   --------------------------------------
+
+    rails generate gatherable migrations
+
+    This will create migrations for each data_point in
+    config/initializers/gatherable.rb
+
+   --------------------------------------

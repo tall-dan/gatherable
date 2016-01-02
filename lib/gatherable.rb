@@ -1,11 +1,13 @@
 require "gatherable/engine"
 require "gatherable/configuration"
-require 'pry'
 
 module Gatherable
   class << self
     def configure
+      return unless configuration.empty?
       yield configuration
+      create_models
+      create_controllers
       create_routes
     end
 
@@ -16,16 +18,21 @@ module Gatherable
 
     private
 
-    def create_controllers
+    def create_models
+      config.data_points.map(&:classify)
+    end
 
+    def create_controllers
+      config.data_points.map(&:controllerify)
     end
 
     def create_routes
-      #      global_identifier = config.global_identifier
-      Gatherable::Enginer.routes.draw do #would this wipe away whatever's in config/routes.rb?
-        configuration.data_points.map(&:name).each do |data_point|
-          get "/:global_identifier/#{data_point}/:id", :to => "#{data_point}#show"
-          post "/:global_identifier/#{data_point}", :to => "#{data_point}#create"
+      global_identifier = config.global_identifier
+      Gatherable::Engine.routes.draw do #would this wipe away whatever's in config/routes.rb?
+        Gatherable.config.data_points.map{ |dp| dp.name.to_s.pluralize }.each do |data_point|
+          scope :path => "/:#{global_identifier}" do
+            resources data_point.to_sym, :only => [:show, :create], :param => "#{data_point.singularize}_id"
+          end
         end
       end
     end
