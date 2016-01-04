@@ -1,7 +1,7 @@
 Uses:
    --------------------------------------
 
-    rails generate gatherable initialize
+    rails generate gatherable initializer
 
     This will create:
         config/initializers/gatherable.rb
@@ -12,5 +12,21 @@ Uses:
 
     This will create migrations for each data_point in
     config/initializers/gatherable.rb
+
+   --------------------------------------
+
+    rails generate gatherable models
+
+    This will create models for each data_point in
+    config/initializers/gatherable.rb. The new models
+    will be stored in app/models/gatherable/
+
+   --------------------------------------
+
+    rails generate gatherable controllers
+
+    This will create models for each data_point in
+    config/initializers/gatherable.rb. The new models
+    will be stored in app/controllers/gatherable/
 
    --------------------------------------

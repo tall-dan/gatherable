@@ -21,7 +21,7 @@ class CreateGatherableSchema < ActiveRecord::Migration
 end
       schema_migration
     end
-    puts "created #{schema_migration}"
+    puts "created #{schema_migration}" if File.exists?(schema_migration)
   end
 
   def write
@@ -29,11 +29,12 @@ end
       puts already_found_message
       return
     end
+    FileUtils.mkdir_p('db/migrate')
     filename = "db/migrate/#{self.class.unique_timestamp}_#{file_suffix}"
     File.open(filename, 'w') do |f|
       f.puts file_template
     end
-    puts "created #{filename}"
+    puts "created #{filename}" if File.exists?(filename)
   end
 
   private
@@ -59,7 +60,7 @@ end
   def file_template
     data_type = data_point.data_type.to_s
     <<-template
-class CreateGatherable#{table_name.classify}  < ActiveRecord::Migration
+class CreateGatherable#{table_name.classify} < ActiveRecord::Migration
   def up
     create_table 'gatherable.#{table_name}', :primary_key => '#{data_point.name}_id' do |t|
       t.#{data_type} :#{data_point.name}, :null => false
@@ -80,7 +81,7 @@ end
   end
 
   def already_found_message
-    "migrations #{matching_migrations} already exist. Not creating migration for #{data_point.name}"
+    "migrations #{matching_migrations} already exist. Skipping migration for #{data_point.name}"
   end
 
   def matching_migrations

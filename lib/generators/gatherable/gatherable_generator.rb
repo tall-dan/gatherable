@@ -7,18 +7,27 @@ class GatherableGenerator < Rails::Generators::NamedBase
 
   private
 
-  def generate_initialize
+  def generate_initializer
     copy_file "gatherable.rb", "config/initializers/gatherable.rb"
-  end
-
-  def schema_migration_created?
-    Dir[File.join('db', 'migrate', "*create_gatherable_schema.rb")].present?
   end
 
   def generate_migrations
     MigrationWriter.write_schema_migration
     Gatherable.config.data_points.each do |data_point|
       MigrationWriter.new(data_point).write
+    end
+  end
+
+  def generate_models
+    Gatherable.config.data_points.each do |data_point|
+      ModelWriter.new(data_point).write
+    end
+  end
+
+  def generate_controllers
+    copy_file 'application_controller.rb', 'app/controllers/gatherable/application_controller.rb'
+    Gatherable.config.data_points.each do |data_point|
+      ControllerWriter.new(data_point).write
     end
   end
 end

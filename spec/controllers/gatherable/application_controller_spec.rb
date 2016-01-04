@@ -12,6 +12,7 @@ describe 'Gatherable::PricesController' do
 
     shared_examples 'response for successful object creation' do
       before do
+        model_params.merge!('session_id' => 'session_id123')
         allow(Gatherable::Price).to receive(:create).with(model_params).and_return(price)
         do_post(passed_params)
       end
@@ -27,7 +28,7 @@ describe 'Gatherable::PricesController' do
         end
       end
 
-      it "returns the saved value for #{attr}" do
+      it "returns the saved values created model" do
         Gatherable::Price.column_names.each do |attr|
           expect(json_response[attr]).to eql model_params[attr]
         end
@@ -43,9 +44,9 @@ describe 'Gatherable::PricesController' do
     end
 
     context 'correct param format' do
-      let(:model_params) { { "price" => "3.00"} }
+      let(:model_params) { { "price" => "3.0"} }
       let(:passed_params) { {:price => model_params} }
-      let(:price) { Gatherable::Price.new(model_params) }
+      let(:price) { Gatherable::Price.new(model_params.merge(:session_id => 'session_id123')) }
       it_behaves_like 'response for successful object creation'
     end
 
@@ -58,17 +59,17 @@ describe 'Gatherable::PricesController' do
       end
 
       context 'required params + junk params given' do
-        let(:model_params) { { "price" => "3.00"} }
+        let(:model_params) { { "price" => "3.0"} }
         let(:junk_params) { { 'yolo' => 'swag' } }
         let(:passed_params) { {:price => model_params.merge(junk_params)}.merge(junk_params) }
-        let(:price) { Gatherable::Price.new(model_params) }
+        let(:price) { Gatherable::Price.new(model_params.merge(:session_id => 'session_id123')) }
         it_behaves_like 'response for successful object creation'
       end
     end
   end
 
   describe '#show', :type => :request do
-    let(:price) { Gatherable::Price.new(:price => 3.00) }
+    let(:price) { Gatherable::Price.new(:price => 3.0) }
 
     before do
       allow(Gatherable::Price).to receive(:find).with('1').and_return(price)
@@ -85,7 +86,7 @@ describe 'Gatherable::PricesController' do
       end
 
       it 'returns the record' do
-        expect(json_response).to eql({"price_id"=>nil, "price"=>"3.0", "registration_id"=>nil, "created_at"=>nil, "updated_at"=>nil})
+        expect(json_response).to eql({"price_id"=>nil, "price"=>"3.0", "session_id" => nil, "created_at"=>nil, "updated_at"=>nil})
       end
 
       specify 'the response code is 302' do

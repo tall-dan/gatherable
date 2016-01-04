@@ -1,5 +1,6 @@
 require "gatherable/engine"
 require "gatherable/configuration"
+require 'pry'
 
 module Gatherable
   class << self

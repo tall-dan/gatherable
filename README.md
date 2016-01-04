@@ -19,7 +19,7 @@ analyzed
 
 In the root of your project, run
 
-`rails generate gatherable initialize`
+`rails generate gatherable initializer`
 
 This will create following `config/initializers/gatherable.rb` file
 

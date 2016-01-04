@@ -1,5 +1,5 @@
 .bundle/
 log/*.log
 pkg/
-test/dummy/*
 coverage/
+spec/dummy/log/*.log
