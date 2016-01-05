@@ -12,11 +12,11 @@ class MigrationWriter
       f.puts <<-schema_migration
 class CreateGatherableSchema < ActiveRecord::Migration
   def up
-    create_schema 'gatherable'
+    create_schema '#{Gatherable.config.schema_name}'
   end
 
   def down
-    drop_schema 'gatherable'
+    drop_schema '#{Gatherable.config.schema_name}'
   end
 end
       schema_migration
@@ -62,7 +62,7 @@ end
     <<-template
 class CreateGatherable#{table_name.classify} < ActiveRecord::Migration
   def up
-    create_table 'gatherable.#{table_name}', :primary_key => '#{data_point.name}_id' do |t|
+    create_table '#{Gatherable.config.schema_name}.#{table_name}', :primary_key => '#{data_point.name}_id' do |t|
       t.#{data_type} :#{data_point.name}, :null => false
       t.string :#{Gatherable.config.global_identifier}, :index => true
       t.timestamps :null => false
@@ -70,7 +70,7 @@ class CreateGatherable#{table_name.classify} < ActiveRecord::Migration
   end
 
   def down
-    drop_table 'gatherable.#{table_name}'
+    drop_table '#{Gatherable.config.schema_name}.#{table_name}'
   end
 end
     template

@@ -17,7 +17,7 @@ class DataPoint
     return Gatherable.const_get(class_name) if Gatherable.const_defined?(class_name)
     klass = Gatherable.const_set(class_name, Class.new(ActiveRecord::Base))
     klass.table_name = name.to_s.pluralize
-    klass.table_name_prefix = 'gatherable.'
+    klass.table_name_prefix = Gatherable.config.schema_name + '.'
     klass
   end
 
