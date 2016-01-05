@@ -47,7 +47,6 @@ describe GatherableGenerator, :type => :generator do
       it 'notifies the user of file creation' do
         allow(File).to receive(:open).with(output_file, 'w')
         allow(File).to receive(:exists?).with(output_file).and_return(false, true)
-        File.exists?(output_file) if generator_target == 'migrations' #hacky
         expect{Rails::Generators.invoke('gatherable', [generator_target])}.to \
           output("created #{output_file}\n").to_stdout
       end
@@ -87,55 +86,6 @@ end
         Rails::Generators.invoke('gatherable', ['controllers'])
       end
     end
-  end
-
-  context 'migrations' do
-    let!(:timestamp) { Time.now }
-    let(:output_file) { "db/migrate/#{timestamp.strftime("%Y%m%d%H%M%S")}_create_gatherable_price.rb" }
-    let(:file_destination) { 'db/migrate' }
-    let(:file_content) do
-      <<-content
-class CreateGatherablePrice < ActiveRecord::Migration
-  def up
-    create_table 'gatherable.prices', :primary_key => 'price_id' do |t|
-      t.decimal :price, :null => false
-      t.string :session_id, :index => true
-      t.timestamps :null => false
-    end
-  end
-
-  def down
-    drop_table 'gatherable.prices'
-  end
-end
-      content
-    end
-
-    let(:generator_target) { 'migrations' }
-
-    before do
-      allow(Time).to receive(:now) { timestamp }
-    end
-
-    it_behaves_like 'creating a file' do
-      before do
-        allow(MigrationWriter).to receive(:write_schema_migration)
-      end
-    end
-
-    context 'setup' do
-      let(:schema_file) { "db/migrate/#{timestamp.strftime("%Y%m%d%H%M%S")}_create_gatherable_schema.rb" }
-      before do
-        allow(Gatherable.config).to receive(:data_points) { [] }
-      end
-
-      it 'creates schema migration' do
-        allow(FileUtils).to receive(:mkdir_p).with('db/migrate')
-        expect(File).to receive(:open).with(schema_file, 'w')
-        Rails::Generators.invoke('gatherable', ['migrations'])
-      end
-    end
-
   end
 
   context 'models' do

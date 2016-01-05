@@ -8,6 +8,7 @@ require 'rspec/rails'
 require 'gatherable'
 require 'webmock'
 require 'pry'
+require 'rake'
 # Add additional requires below this line. Rails is not loaded until this point!
 
 # Requires supporting ruby files with custom matchers and macros, etc, in
@@ -41,9 +42,16 @@ RSpec.configure do |config|
   config.filter_rails_from_backtrace!
 
   config.before(:suite) do
+
     Gatherable.configure do |c|
-      c.global_identifier :session_id
+      c.global_identifier = :session_id
       c.data_point :price, :decimal
     end
+    Rails.application.load_tasks
+    Rake::Task['db:prepare'].invoke #this is essentially an integration test of the migration writer
+  end
+
+  config.after(:suite) do
+    FileUtils.rm_rf('db/migrate')
   end
 end
