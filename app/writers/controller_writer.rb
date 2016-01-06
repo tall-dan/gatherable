@@ -1,12 +1,12 @@
 class ControllerWriter
-  attr_reader :data_point
-  def initialize(data_point)
-    @data_point = data_point
+  attr_reader :data_table
+  def initialize(data_table)
+    @data_table = data_table
   end
 
   def write
     if File.exists?(filename)
-      puts "Controller already defined for #{data_point.name}. Skipping"
+      puts "Controller already defined for #{data_table.name}. Skipping"
       return
     end
     FileUtils.mkdir_p('app/controllers/gatherable')
@@ -19,14 +19,14 @@ class ControllerWriter
   private
 
   def filename
-    controller_file = "#{data_point.name.to_s.pluralize}_controller.rb"
+    controller_file = "#{data_table.name.to_s.pluralize}_controller.rb"
     File.join(Rails.root, 'app', 'controllers', 'gatherable', controller_file)
   end
 
   def controller_contents
     <<-controller
 module Gatherable
-  class #{data_point.controller_name} < Gatherable::ApplicationController
+  class #{data_table.controller_name} < Gatherable::ApplicationController
   end
 end
     controller

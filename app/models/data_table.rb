@@ -1,8 +1,8 @@
-class DataPoint
-  attr_reader :name, :data_type
-  def initialize(name, data_type)
+class DataTable
+  attr_reader :name, :columns
+  def initialize(name, columns)
     @name = name
-    @data_type = data_type
+    @columns = columns
   end
 
   def class_name

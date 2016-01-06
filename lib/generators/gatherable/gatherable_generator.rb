@@ -13,21 +13,21 @@ class GatherableGenerator < Rails::Generators::NamedBase
 
   def generate_migrations
     MigrationWriter.write_schema_migration
-    Gatherable.config.data_points.each do |data_point|
-      MigrationWriter.new(data_point).write
+    Gatherable.config.data_tables.each do |data_table|
+      MigrationWriter.new(data_table).write
     end
   end
 
   def generate_models
-    Gatherable.config.data_points.each do |data_point|
-      ModelWriter.new(data_point).write
+    Gatherable.config.data_tables.each do |data_table|
+      ModelWriter.new(data_table).write
     end
   end
 
   def generate_controllers
     copy_file 'application_controller.rb', 'app/controllers/gatherable/application_controller.rb'
-    Gatherable.config.data_points.each do |data_point|
-      ControllerWriter.new(data_point).write
+    Gatherable.config.data_tables.each do |data_table|
+      ControllerWriter.new(data_table).write
     end
   end
 end

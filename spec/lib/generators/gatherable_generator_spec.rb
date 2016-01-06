@@ -81,7 +81,7 @@ end
 
     context 'setup' do
       it 'copies application controller' do
-        allow(Gatherable.config).to receive(:data_points) { [] }
+        allow(Gatherable.config).to receive(:data_tables) { [] }
         expect(generator).to receive(:copy_file).with('application_controller.rb', 'app/controllers/gatherable/application_controller.rb')
         Rails::Generators.invoke('gatherable', ['controllers'])
       end

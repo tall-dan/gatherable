@@ -9,9 +9,9 @@ Gem::Specification.new do |s|
   s.version     = Gatherable::VERSION
   s.authors     = ['Daniel Schepers']
   s.email       = ['schepedw@gmail.com']
-  s.homepage    = 'TODO'
-  s.summary     = 'TODO: Summary of Gatherable.'
-  s.description = 'TODO: Description of Gatherable.'
+  s.homepage    = 'https://github.com/schepedw/gatherable'
+  s.summary     = 'Painlessly gather and store data'
+  s.description = 'Dynamically define models, controllers, and routes'
   s.license     = 'MIT'
 
   s.files = Dir['{app,config,db,lib}/**/*', 'MIT-LICENSE', 'Rakefile', 'README.rdoc']

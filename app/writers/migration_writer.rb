@@ -1,8 +1,8 @@
 class MigrationWriter
-  attr_reader :data_point
+  attr_reader :data_table
 
-  def initialize(data_point)
-    @data_point = data_point
+  def initialize(data_table)
+    @data_table = data_table
   end
 
   def self.write_schema_migration
@@ -54,16 +54,15 @@ end
   end
 
   def table_name
-    @table_name ||= data_point.classify.table_name
+    @table_name ||= data_table.classify.table_name
   end
 
   def file_template
-    data_type = data_point.data_type.to_s
     <<-template
 class CreateGatherable#{table_name.classify} < ActiveRecord::Migration
   def up
-    create_table '#{Gatherable.config.schema_name}.#{table_name}', :primary_key => '#{data_point.name}_id' do |t|
-      t.#{data_type} :#{data_point.name}, :null => false
+    create_table '#{Gatherable.config.schema_name}.#{table_name}', :primary_key => '#{data_table.name}_id' do |t|
+      #{migration_columns}
       t.string :#{Gatherable.config.global_identifier}, :index => true
       t.timestamps :null => false
     end
@@ -76,12 +75,18 @@ end
     template
   end
 
+  def migration_columns
+    data_table.columns.inject("") do |columns, (name, type)|
+      columns << "t.#{type} :#{name}\n"
+    end
+  end
+
   def file_suffix
     @file_suffix ||= "create_gatherable_#{table_name.singularize}.rb"
   end
 
   def already_found_message
-    "migrations #{matching_migrations} already exist. Skipping migration for #{data_point.name}"
+    "migrations #{matching_migrations} already exist. Skipping migration for #{data_table.name}"
   end
 
   def matching_migrations

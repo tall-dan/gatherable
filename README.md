@@ -25,18 +25,26 @@ This will create following `config/initializers/gatherable.rb` file
 
 ```
 Gatherable.configure do |c|
-  c.global_identifier :session_id
+  c.global_identifier = :session_id
 
  # c.data_point :data_point_name, :data_point_type
   c.data_point :price, :decimal
+
+  #c.data_table :table_name, { column_name: :column_type, column_name2: :column_type }
+  c.data_table :requested_loan_amount, { requested_loan_amount: :decimal, total_cost: :decimal, monthly_repayment_amount: :decimal }
+
+  #  for both data tables and data points, you'll automatically get a primary key 'table_name_id',
+  #  an indexed global identifier, and timestamps
+
+  #If want your db schema to be something besides 'gatherable', uncomment the line below
+  #c.schema_name = 'foo_bar'
 end
 ```
 
 Name your `global_identifier` however you want (you have ta have
 one, sorry), and whatever data points you want to collect. Each data
-point will later become its own table (see [below](#generate-migrations)). Gatherable currently
-implements simple tables, adding more complex migration funcionality is
-on the todo list.
+point will later become its own table (see [below](#generate-migrations)).
+Should you want more complex tables, use the data_table syntax shown above.
 
 ### Generate migrations
 Gatherable will auto-generate the migrations to support the data points
@@ -63,12 +71,12 @@ end
 Models, controllers, and routes are dynamically defined when you configure
 gatherable, so you're ready to roll!
 
-Right now, only `GET` and `POST` routes are created when gatherable is
+`GET` and `POST` routes are created when gatherable is
 configured. They look like this:
 
 ```
 GET '/gatherable/:global_identifier/model_name/:model_id'
-POST '/gatherable/:global_identifier/model_name
+POST '/gatherable/:global_identifier/model_name'
 ```
 
 The `create` method for gatherable data points requires a specific param

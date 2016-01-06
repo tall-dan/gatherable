@@ -20,19 +20,19 @@ module Gatherable
     private
 
     def create_models
-      config.data_points.map(&:classify)
+      config.data_tables.map(&:classify)
     end
 
     def create_controllers
-      config.data_points.map(&:controllerify)
+      config.data_tables.map(&:controllerify)
     end
 
     def create_routes
       global_identifier = config.global_identifier
       Gatherable::Engine.routes.draw do #would this wipe away whatever's in config/routes.rb?
-        Gatherable.config.data_points.map{ |dp| dp.name.to_s.pluralize }.each do |data_point|
+        Gatherable.config.data_tables.map{ |dp| dp.name.to_s.pluralize }.each do |data_table|
           scope :path => "/:#{global_identifier}" do
-            resources data_point.to_sym, :only => [:show, :create], :param => "#{data_point.singularize}_id"
+            resources data_table.to_sym, :only => [:show, :create], :param => "#{data_table.singularize}_id"
           end
         end
       end

@@ -1,8 +1,8 @@
 require 'rails_helper'
 
 module Gatherable
-  describe DataPoint do
-    subject(:data_point) { described_class.new(:price, :decimal) }
+  describe DataTable do
+    subject(:data_table) { described_class.new(:price, :decimal) }
     context 'generating models' do
       before { subject.classify }
       it 'creates the model class' do
@@ -24,21 +24,5 @@ module Gatherable
         expect(Gatherable::PricesController.superclass).to be Gatherable::ApplicationController
       end
     end
-
-    #TODO: move these
-=begin
-    before do
-      Gatherable.configure do |config|
-        config.data_point :price, :decimal
-      end
-    end
-    it 'indexes the global_identifier' do
-
-    end
-
-    it 'prefixes the primary key with the class name' do
-
-    end
-=end
   end
 end

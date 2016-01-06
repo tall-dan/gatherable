@@ -45,8 +45,9 @@ RSpec.configure do |config|
 
     Gatherable.configure do |c|
       c.global_identifier = :session_id
-      c.data_point :price, :decimal
+      c.data_table :price, { price: :decimal, total_cost: :decimal, monthly_repayment_amount: :decimal }
     end
+
     Rails.application.load_tasks
     Rake::Task['db:prepare'].invoke #this is essentially an integration test of the migration writer
   end

@@ -3,14 +3,20 @@ require "gatherable/configuration"
 
 describe Gatherable do
   describe '#configuration' do
-    context 'data points' do
-      it 'saves data points' do
-        expect(Gatherable.config.data_points.count).to eql 1
-      end
+    context 'data tables' do
+      context 'saving data tables' do
+        it 'saves data tables' do
+          expect(Gatherable.config.data_tables.count).to eql 1
+        end
 
-      it 'saves data points with correct attributes' do
-        expect(Gatherable.config.data_points.first.data_type).to eql :decimal
-        expect(Gatherable.config.data_points.first.name).to eql :price
+        it 'saves data tables as data with correct name' do
+          expect(Gatherable.config.data_tables.first.name).to eql :price
+        end
+
+        it 'saves data tables as data tables with correct columns' do
+          expect(Gatherable.config.data_tables.first.columns).to eql \
+            ({:monthly_repayment_amount => :decimal,:price => :decimal, :total_cost => :decimal})
+        end
       end
     end
 
