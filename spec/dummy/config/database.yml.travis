@@ -1,0 +1,4 @@
+test:
+  host: "localhost"
+  dbname: travis_ci_test
+  user: postgres

@@ -1,4 +1,4 @@
-# Gatherable
+# Gatherable [![Build Status](https://travis-ci.org/schepedw/gatherable.svg)](https://travis-ci.org/schepedw/gatherable)
 
 Gatherable is similar to rails scaffolding, but offers a few different
 features. You can use Gatherable to dynamically create active record
