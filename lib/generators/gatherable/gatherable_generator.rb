@@ -30,4 +30,10 @@ class GatherableGenerator < Rails::Generators::NamedBase
       ControllerWriter.new(data_table).write
     end
   end
+
+  def generate_javascripts
+    Gatherable.config.data_tables.each do |data_table|
+      JavascriptWriter.new(data_table).write
+    end
+  end
 end

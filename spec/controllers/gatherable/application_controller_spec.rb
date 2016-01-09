@@ -87,7 +87,7 @@ describe 'Gatherable::PricesController' do
 
       it 'returns the record' do
         expect(json_response).to eql \
-        ({"price_id"=>nil, "price"=>"3.0", "session_id" => nil, "created_at"=>nil, "updated_at"=>nil, "total_cost" => nil, "monthly_repayment_amount" => nil})
+        ({"price_id"=>nil, "price"=>"3.0", "session_id" => nil, "created_at"=>nil, "updated_at"=>nil})
       end
 
       specify 'the response code is 302' do

@@ -3,6 +3,9 @@ require 'generators/gatherable/gatherable_generator'
 
 describe GatherableGenerator, :type => :generator do
   let(:file_stream) { IO.new(0) }
+  before do
+    allow(Gatherable.config).to receive(:data_tables).and_return [DataTable.new(:price, :price => :decimal)]
+  end
 
   it 'creates initializer' do
     generator = described_class.new(['initializer'])

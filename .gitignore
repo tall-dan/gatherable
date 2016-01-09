@@ -3,3 +3,4 @@ log/*.log
 pkg/
 coverage/
 spec/dummy/log/*.log
+gatherable*.gem
