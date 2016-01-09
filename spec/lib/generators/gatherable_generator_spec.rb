@@ -107,4 +107,29 @@ end
     let(:generator_target) { 'models' }
     it_behaves_like 'creating a file'
   end
+
+  context 'javascript classes' do
+    let(:file_destination) { 'app/assets/javascripts/gatherable' }
+    let(:output_file) { File.join(Rails.root, file_destination, '/prices.js') }
+    let(:file_content) do
+      <<-content
+var Price = {
+  create: function(global_identifier, options){
+    $.ajax({
+      url: '/gatherable/' + global_identifier + '/prices',
+      method: 'POST',
+      data: { price: options }
+    });
+  },
+  get: function(global_identifier, id) {
+    $.ajax({
+      url: '/gatherable/' + global_identifier + '/price/' + options[price_id],
+    });
+  }
+}
+        content
+    end
+    let(:generator_target) { 'javascripts' }
+    it_behaves_like 'creating a file'
+  end
 end

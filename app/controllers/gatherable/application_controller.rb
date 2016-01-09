@@ -1,14 +1,14 @@
 module Gatherable
   class ApplicationController < ::ActionController::Base
     def show
-      render :json => model_class.find(params[model_id]), :status => :found
+      render :json => model_class.find_by!(params.slice(model_id, global_identifier)), :status => :found
     rescue ActiveRecord::RecordNotFound => e
       render :json => { :errors => e.message}, :status => :not_found
     end
 
     def create
-      render :json => model_class.create(model_params), :status => :created
-    rescue ActionController::ParameterMissing => e
+      render :json => model_class.create!(model_params), :status => :created
+    rescue StandardError => e
       render :json => { :errors => e.message}, :status => :unprocessable_entity
     end
 

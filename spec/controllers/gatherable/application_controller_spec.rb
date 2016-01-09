@@ -13,12 +13,12 @@ describe 'Gatherable::PricesController' do
     shared_examples 'response for successful object creation' do
       before do
         model_params.merge!('session_id' => 'session_id123')
-        allow(Gatherable::Price).to receive(:create).with(model_params).and_return(price)
+        allow(Gatherable::Price).to receive(:create!).with(model_params).and_return(price)
         do_post(passed_params)
       end
 
       it 'creates an object' do
-        expect(Gatherable::Price).to receive(:create).with(model_params)
+        expect(Gatherable::Price).to receive(:create!).with(model_params)
         do_post({:price => model_params })
       end
 
@@ -72,8 +72,8 @@ describe 'Gatherable::PricesController' do
     let(:price) { Gatherable::Price.new(:price => 3.0) }
 
     before do
-      allow(Gatherable::Price).to receive(:find).with('1').and_return(price)
-      allow(Gatherable::Price).to receive(:find).with('0').and_raise(ActiveRecord::RecordNotFound)
+      allow(Gatherable::Price).to receive(:find_by!).with(:price_id => '1', :session_id => 'session_id123').and_return(price)
+      allow(Gatherable::Price).to receive(:find_by!).with(:price_id => '0', :session_id => 'session_id123').and_raise(ActiveRecord::RecordNotFound)
     end
 
     def do_get(price_id)
