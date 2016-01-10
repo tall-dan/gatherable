@@ -6,6 +6,8 @@ rvm:
 
 addons:
   postgresql: "9.3"
+  code_climate:
+    repo_token: c1a8c6215211cdf5b339f619640f0497378c14383d7317a9c4c64a5af27e0a33
 
 before_script:
   - RAILS_ENV=test bundle exec rake db:setup

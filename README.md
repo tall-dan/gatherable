@@ -1,8 +1,10 @@
-# Gatherable [![Build Status](https://travis-ci.org/schepedw/gatherable.svg)](https://travis-ci.org/schepedw/gatherable)
+# Gatherable [![Build Status](https://travis-ci.org/schepedw/gatherable.svg)](https://travis-ci.org/schepedw/gatherable) [![Code Climate](https://codeclimate.com/github/schepedw/gatherable/badges/gpa.svg)](https://codeclimate.com/github/schepedw/gatherable) [![coverage ](https://codeclimate.com/github/schepedw/gatherable/badges/coverage.svg)](https://codeclimate.com/github/schepedw/gatherable)
 
-Gatherable is similar to rails scaffolding, but offers a few different
-features. You can use Gatherable to dynamically create active record
+
+Use Gatherable to dynamically create active record
 models, controllers for those models, and routes for those controllers.
+You can even use Gatherable to create Javascript objects to talk to your
+new routes.
 
 Gatherable was conceived with the purpose of gathering information about
 the user experience. The idea is to gather various data points and link them

@@ -6,10 +6,12 @@ abort("The Rails environment is running in production mode!") if Rails.env.produ
 require 'spec_helper'
 require 'rspec/rails'
 require 'gatherable'
-require 'webmock'
 require 'pry'
 require 'rake'
 # Add additional requires below this line. Rails is not loaded until this point!
+
+require "codeclimate-test-reporter"
+CodeClimate::TestReporter.start
 
 # Checks for pending migration and applies them before tests are run.
 # If you are not using ActiveRecord, you can remove this line.
