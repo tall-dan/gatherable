@@ -23,6 +23,5 @@ Gem::Specification.new do |s|
   s.add_development_dependency 'pry'
   s.add_development_dependency 'rake'
   s.add_development_dependency 'rspec-rails'
-  s.add_development_dependency 'simplecov'
   s.add_development_dependency 'webmock'
 end

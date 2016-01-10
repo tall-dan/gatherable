@@ -10,11 +10,9 @@ describe 'Gatherable::PricesController' do
       post "/gatherable/session_id123/prices.json", params
     end
 
-    shared_examples 'response for successful object creation' do
+    shared_examples 'successful object creation' do
       before do
         model_params.merge!('session_id' => 'session_id123')
-        allow(Gatherable::Price).to receive(:create!).with(model_params).and_return(price)
-        do_post(passed_params)
       end
 
       it 'creates an object' do
@@ -23,22 +21,30 @@ describe 'Gatherable::PricesController' do
       end
 
       it "contains all attributes of the model" do
+        allow(Gatherable::Price).to receive(:create!).with(model_params).and_return(price)
+        do_post(passed_params)
         Gatherable::Price.column_names.each do |attr|
           expect(json_response.keys).to include(attr)
         end
       end
 
       it "returns the saved values created model" do
+        allow(Gatherable::Price).to receive(:create!).with(model_params).and_return(price)
+        do_post(passed_params)
         Gatherable::Price.column_names.each do |attr|
           expect(json_response[attr]).to eql model_params[attr]
         end
       end
 
       specify 'the object created is valid' do
+        allow(Gatherable::Price).to receive(:create!).with(model_params).and_return(price)
+        do_post(passed_params)
         expect(price).to be_valid
       end
 
       specify 'status is 201' do
+        allow(Gatherable::Price).to receive(:create!).with(model_params).and_return(price)
+        do_post(passed_params)
         expect(response.status).to eql 201
       end
     end
@@ -47,7 +53,41 @@ describe 'Gatherable::PricesController' do
       let(:model_params) { { "price" => "3.0"} }
       let(:passed_params) { {:price => model_params} }
       let(:price) { Gatherable::Price.new(model_params.merge(:session_id => 'session_id123')) }
-      it_behaves_like 'response for successful object creation'
+      it_behaves_like 'successful object creation'
+    end
+
+    context 'auth_method set' do
+      let(:model_params) { { "price" => "3.0"} }
+      let(:passed_params) { {:price => model_params} }
+      context 'session identifier matches passed identifier' do
+        before do
+          allow(Gatherable.config).to receive(:auth_method) { :session }
+          session[:session_id] = 'session_id123'
+          allow_any_instance_of(@controller.class).to receive(:session) { session } #boo any_instance
+        end
+        let(:price) { Gatherable::Price.new(model_params.merge(:session_id => 'session_id123')) }
+        it_behaves_like 'successful object creation'
+      end
+
+      context 'session identifier does not match passed identifier' do
+        before do
+          allow(Gatherable.config).to receive(:auth_method) { :session }
+          do_post(passed_params)
+        end
+
+        it 'returns an empty response body' do
+          expect(response.body).to be_empty
+        end
+
+        it 'gives an unauthorized response status' do
+          expect(response.status).to eql 401
+        end
+
+        it 'does not create an object' do
+          expect(Gatherable::Price).to_not receive(:create!)
+          do_post(passed_params)
+        end
+      end
     end
 
     context 'incorrect param format' do
@@ -63,7 +103,7 @@ describe 'Gatherable::PricesController' do
         let(:junk_params) { { 'yolo' => 'swag' } }
         let(:passed_params) { {:price => model_params.merge(junk_params)}.merge(junk_params) }
         let(:price) { Gatherable::Price.new(model_params.merge(:session_id => 'session_id123')) }
-        it_behaves_like 'response for successful object creation'
+        it_behaves_like 'successful object creation'
       end
     end
   end

@@ -1,5 +1,7 @@
 module Gatherable
   class ApplicationController < ::ActionController::Base
+    before_action :authenticate, only: [:create]
+
     def show
       render :json => model_class.find_by!(params.slice(model_id, global_identifier)), :status => :found
     rescue ActiveRecord::RecordNotFound => e
@@ -13,6 +15,11 @@ module Gatherable
     end
 
     private
+
+    def authenticate
+      return unless Gatherable.config.auth_method == :session
+      head :unauthorized unless params[global_identifier] == session[global_identifier]
+    end
 
     def model_class
       Object.const_get(model_name)

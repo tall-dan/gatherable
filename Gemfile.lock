@@ -50,7 +50,6 @@ GEM
     crack (0.4.3)
       safe_yaml (~> 1.0.0)
     diff-lcs (1.2.5)
-    docile (1.1.5)
     erubis (2.7.0)
     globalid (0.3.6)
       activesupport (>= 4.1.0)
@@ -118,11 +117,6 @@ GEM
       rspec-support (~> 3.4.0)
     rspec-support (3.4.1)
     safe_yaml (1.0.4)
-    simplecov (0.11.1)
-      docile (~> 1.1.0)
-      json (~> 1.8)
-      simplecov-html (~> 0.10.0)
-    simplecov-html (0.10.0)
     slop (3.6.0)
     sprockets (3.5.2)
       concurrent-ruby (~> 1.0)
@@ -149,7 +143,6 @@ DEPENDENCIES
   pry
   rake
   rspec-rails
-  simplecov
   webmock
 
 BUNDLED WITH

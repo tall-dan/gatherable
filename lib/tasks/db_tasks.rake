@@ -1,7 +1,7 @@
-require 'pry'
 namespace :db do
   ROLE='gatherable'
   task :prepare do
+    require 'rails/generators'
     Rails::Generators.invoke('gatherable', ['migrations'])
     ActiveRecord::Migrator.migrate "db/migrate"
   end
