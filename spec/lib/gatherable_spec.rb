@@ -34,12 +34,16 @@ describe Gatherable do
       end
     end
 
+    it 'creates a module' do
+      expect(Object.const_defined?("Gatherable")).to be true
+    end
+
     Gatherable.config.data_tables.map(&:name).map(&:to_s).each do |name|
 
       context 'model_class' do
         let(:klass) { Object.const_get("Gatherable::#{name.classify}") }
         it "creates a model class for #{name}" do
-          expect(Object.const_defined?("Gatherable::#{name.classify}")).to be true
+          expect(Gatherable.const_defined?(name.classify)).to be true
         end
 
         specify "#{name} has the correct table name" do
@@ -49,10 +53,18 @@ describe Gatherable do
         specify "#{name} is prefixed with 'gatherable'" do
           expect(klass.table_name_prefix).to eql 'gatherable.'
         end
+
+        specify "#{name} inherits from ActiveRecord::Base" do
+          expect(klass.superclass).to be ActiveRecord::Base
+        end
       end
 
       it "creates controller for #{name}" do
-        expect(Object.const_defined?("Gatherable::#{name.classify.pluralize}Controller")).to be true
+        expect(Gatherable.const_defined?("#{name.classify.pluralize}Controller")).to be true
+      end
+
+      specify "#{name} controller inherits from Gatherable::ApplicationController" do
+        expect(Gatherable::PricesController.superclass).to be Gatherable::ApplicationController
       end
     end
 
