@@ -1,18 +1,25 @@
 module Gatherable
   class ApplicationController < ::ActionController::Base
+    before_action :authenticate, only: [:create]
+
     def show
-      render :json => model_class.find(params[model_id]), :status => :found
+      render json: model_class.find_by!(params.slice(model_id, global_identifier)), status: :found
     rescue ActiveRecord::RecordNotFound => e
-      render :json => { :errors => e.message}, :status => :not_found
+      render json: { errors: e.message}, status: :not_found
     end
 
     def create
-      render :json => model_class.create(model_params), :status => :created
-    rescue ActionController::ParameterMissing => e
-      render :json => { :errors => e.message}, :status => :unprocessable_entity
+      render json: model_class.create!(model_params), status: :created
+    rescue StandardError => e
+      render json: { errors: e.message}, status: :unprocessable_entity
     end
 
     private
+
+    def authenticate
+      return unless Gatherable.config.auth_method == :session
+      head :unauthorized unless params[global_identifier] == session[global_identifier]
+    end
 
     def model_class
       Object.const_get(model_name)
