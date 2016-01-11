@@ -1,6 +1,6 @@
 module Gatherable
   class ApplicationController < ::ActionController::Base
-    before_action :authenticate, only: [:create]
+    before_filter :authenticate, only: [:create]
 
     def show
       render :json => model_class.find_by!(params.slice(model_id, global_identifier)), :status => :found

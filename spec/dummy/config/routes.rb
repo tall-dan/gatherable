@@ -1,4 +1,4 @@
 Rails.application.routes.draw do
-  root 'application#show'
+  root :to => 'application#show'
   mount Gatherable::Engine => "/gatherable"
 end
