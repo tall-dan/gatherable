@@ -41,7 +41,7 @@ describe Gatherable do
     Gatherable.config.data_tables.map(&:name).map(&:to_s).each do |name|
 
       context 'model_class' do
-        let(:klass) { Object.const_get("Gatherable::#{name.classify}") }
+        let(:klass) { Gatherable.const_get("#{name.classify}") }
         it "creates a model class for #{name}" do
           expect(Gatherable.const_defined?(name.classify)).to be true
         end
