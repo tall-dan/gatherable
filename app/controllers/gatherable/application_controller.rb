@@ -22,7 +22,7 @@ module Gatherable
     end
 
     def model_class
-      Object.const_get(model_name)
+      Gatherable.const_get(unmodularized_model_name.classify)
     end
 
     def model_name
