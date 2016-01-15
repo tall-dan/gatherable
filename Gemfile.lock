@@ -1,8 +1,8 @@
 PATH
   remote: .
   specs:
-    gatherable (0.0.2)
-      rails (>= 3.0.0)
+    gatherable (0.0.3)
+      rails (>= 4.0.0)
 
 GEM
   remote: https://rubygems.org/
