@@ -61,10 +61,10 @@ end
     <<-template
 class CreateGatherable#{table_name.classify} < ActiveRecord::Migration
   def up
-    create_table '#{Gatherable.config.schema_name}.#{table_name}', :primary_key => '#{data_table.name}_id' do |t|
+    create_table '#{Gatherable.config.schema_name}.#{table_name}', primary_key: '#{data_table.name}_id' do |t|
       #{migration_columns}
-      t.string :#{Gatherable.config.global_identifier}, :index => true
-      t.timestamps :null => false
+      t.string :#{Gatherable.config.global_identifier}, index: true
+      t.timestamps null: false
     end
   end
 

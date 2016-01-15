@@ -1,6 +1,6 @@
 module Gatherable
   class Configuration
-    delegate :empty?, :to => :data_tables
+    delegate :empty?, to: :data_tables
     attr_accessor :global_identifier
     attr_writer :schema_name, :auth_method
 
