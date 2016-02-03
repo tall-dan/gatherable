@@ -123,7 +123,7 @@ var Price = {
   },
   get: function(global_identifier, id) {
     $.ajax({
-      url: '/gatherable/' + global_identifier + '/price/' + options[price_id],
+      url: '/gatherable/' + global_identifier + '/price/' + options[price_id]
     });
   }
 }

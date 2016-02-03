@@ -23,7 +23,7 @@ var #{data_table.class_name} = {
   },
   get: function(global_identifier, id) {
     $.ajax({
-      url: '/gatherable/' + global_identifier + '/#{data_table.name}/' + options[#{data_table.name}_id],
+      url: '/gatherable/' + global_identifier + '/#{data_table.name}/' + options[#{data_table.name}_id]
     });
   }
 }

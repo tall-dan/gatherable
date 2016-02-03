@@ -59,9 +59,9 @@ end
 
   def file_template
     <<-template
-class CreateGatherable#{table_name.classify} < ActiveRecord::Migration
+class CreateGatherable#{data_table.name.to_s.classify} < ActiveRecord::Migration
   def up
-    create_table '#{Gatherable.config.schema_name}.#{table_name}', :primary_key => '#{data_table.name}_id' do |t|
+    create_table '#{table_name}', :primary_key => '#{data_table.name}_id' do |t|
       #{migration_columns}
       t.string :#{Gatherable.config.global_identifier}, :index => true
       t.timestamps :null => false
@@ -69,7 +69,7 @@ class CreateGatherable#{table_name.classify} < ActiveRecord::Migration
   end
 
   def down
-    drop_table '#{Gatherable.config.schema_name}.#{table_name}'
+    drop_table '#{table_name}'
   end
 end
     template
@@ -82,7 +82,7 @@ end
   end
 
   def file_suffix
-    @file_suffix ||= "create_gatherable_#{table_name.singularize}.rb"
+    @file_suffix ||= "create_gatherable_#{data_table.name}.rb"
   end
 
   def already_found_message

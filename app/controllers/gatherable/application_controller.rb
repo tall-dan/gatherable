@@ -22,7 +22,7 @@ module Gatherable
     end
 
     def model_class
-      Gatherable.const_get(unmodularized_model_name.classify)
+      Gatherable.const_get(unmodularized_model_name)
     end
 
     def model_name
@@ -30,15 +30,19 @@ module Gatherable
     end
 
     def model_id
-      "#{unmodularized_model_name}_id"
+      "#{model_name_as_var}_id"
     end
 
     def unmodularized_model_name
-      model_name.split('::').last.downcase
+      model_name.split('::').last
+    end
+
+    def model_name_as_var
+      unmodularized_model_name.underscore
     end
 
     def model_params
-      params.require(unmodularized_model_name).permit(
+      params.require(model_name_as_var).permit(
         *model_class.column_names
       ).merge(global_identifier => params[global_identifier])
     end
