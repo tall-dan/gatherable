@@ -77,7 +77,8 @@ end
 
   def migration_columns
     data_table.columns.inject("") do |columns, (name, type)|
-      columns << "t.#{type} :#{name}\n"
+      non_null = ", :null => false" if name == data_table.name
+      columns << "t.#{type} :#{name}#{non_null}\n"
     end
   end
 
