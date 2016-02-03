@@ -142,7 +142,7 @@ DEPENDENCIES
   pg (~> 0.18)
   pry (~> 0.10)
   rake (>= 10.0.0)
-  rspec-rails (~> 3.4.0)
+  rspec-rails (~> 3.0)
 
 BUNDLED WITH
    1.10.6
