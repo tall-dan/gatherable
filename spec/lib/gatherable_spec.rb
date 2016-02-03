@@ -47,11 +47,7 @@ describe Gatherable do
         end
 
         specify "#{name} has the correct table name" do
-          expect(klass.table_name).to eql name.pluralize
-        end
-
-        specify "#{name} is prefixed with 'gatherable'" do
-          expect(klass.table_name_prefix).to eql 'gatherable.'
+          expect(klass.table_name).to eql Gatherable.config.schema_name + '.' + name.pluralize
         end
 
         specify "#{name} inherits from ActiveRecord::Base" do
