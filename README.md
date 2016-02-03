@@ -88,6 +88,35 @@ format, like so:
 { data_point_name: { attr_1: 'foo', attr_2: 'bar' } }
 ```
 
+### Seeing the magic
+
+If you want to customize the models or controllers that Gatherable
+dynamically defines, simply generate them:
+
+```
+rails generate gatherable models
+rails generate gatherable controllers
+```
+
+You can also generate simple javascript objects to talk to your
+controllers:
+
+```
+rails generate gatherable javascripts
+```
+
+### Security
+
+You may have thought, "This gem pretty much just opens a door straight to my
+database!" You would be correct. I'm not sure of "The Best Way" to fix
+this. I've got a small bandaid. In `config/gatherable`, set
+`config.auth_method = :session`.
+
+Now, when posting a new object, Gatherable will check to see if the
+passed global_identifier is the same as what is stored in the session.
+**Note: it's up to you to put the correctly named variable in your
+session
+
 #### Credit
 This was written partially on [Enova's](http://www.enova.com/) time /
 dime
