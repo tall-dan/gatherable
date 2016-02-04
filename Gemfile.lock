@@ -2,7 +2,7 @@ PATH
   remote: .
   specs:
     gatherable (1.0.0)
-      rails (>= 4.0.0)
+      rails (~> 4.0)
 
 GEM
   remote: https://rubygems.org/
@@ -141,7 +141,7 @@ DEPENDENCIES
   gatherable!
   pg (~> 0.18)
   pry (~> 0.10)
-  rake (>= 10.0.0)
+  rake (~> 10.0)
   rspec-rails (~> 3.0)
 
 BUNDLED WITH
