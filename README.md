@@ -27,10 +27,10 @@ This will create following `config/initializers/gatherable.rb` file
 
 ```
 Gatherable.configure do |c|
-  c.global_identifier = :session_id
+  c.global_identifier = :gatherable_id
 
  # c.data_point :data_point_name, :data_point_type
-  c.data_point :price, :decimal
+  c.data_point :price, :decimal # new_record_strategy: [:update, :insert] # defaults to :insert
 
   #c.data_table :table_name, { column_name: :column_type, column_name2: :column_type }
   c.data_table :requested_loan_amount, { requested_loan_amount: :decimal, total_cost: :decimal, monthly_repayment_amount: :decimal }
@@ -105,6 +105,21 @@ controllers:
 rails generate gatherable javascripts
 ```
 
+### Saving some space
+If you're using this to track user interactions, you may find that this
+engine creates quite a bit of data. In order to alleviate that, you can
+use `new_record_strategy` for your data points / tables
+
+`data_point :price, :decimal, new_record_strategy: :update #default is
+:insert`
+
+When using the `update` strategy, models will try to find a record with
+the same `global_identifier` and update it. A record will be inserted if
+there are none with a matching `gatherable_id`
+
+Conversely, the `insert` strategy will not add an `updated_at` column to
+your migrations, since you'll be inserting a new record each time
+
 ### Security
 
 You may have thought, "This gem pretty much just opens a door straight to my
@@ -113,9 +128,9 @@ this. I've got a small bandaid. In `config/gatherable`, set
 `config.auth_method = :session`.
 
 Now, when posting a new object, Gatherable will check to see if the
-passed global_identifier is the same as what is stored in the session.
+passed `global_identifier` is the same as what is stored in the session.
 **Note: it's up to you to put the correctly named variable in your
-session
+session**
 
 #### Credit
 This was written partially on [Enova's](http://www.enova.com/) time /

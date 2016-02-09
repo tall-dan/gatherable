@@ -9,7 +9,13 @@ module Gatherable
     end
 
     def create
-      render :json => model_class.create!(model_params), :status => :created
+      if data_table.new_record_strategy == :update
+        model = model_class.find_or_initialize_by(global_identifier => model_params[global_identifier])
+        model.update_attributes(model_params)
+        render :json => model, :status => :ok
+      else
+        render :json => model_class.create!(model_params), :status => :created
+      end
     rescue StandardError => e
       render :json => { :errors => e.message}, :status => :unprocessable_entity
     end
@@ -49,6 +55,10 @@ module Gatherable
 
     def global_identifier
       Gatherable.config.global_identifier
+    end
+
+    def data_table
+      DataTable.find_by_name(model_name_as_var)
     end
   end
 end

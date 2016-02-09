@@ -2,7 +2,7 @@ Gatherable.configure do |c|
   c.global_identifier = :gatherable_id
 
  # c.data_point :data_point_name, :data_point_type
-  c.data_point :price, :decimal
+  c.data_point :price, :decimal # new_record_strategy: [:insert, :create] # defaults to :insert
 
   #c.data_table :table_name, { column_name: :column_type, column_name2: :column_type }
   c.data_table :requested_loan_amount, { requested_loan_amount: :decimal, total_cost: :decimal, monthly_repayment_amount: :decimal }

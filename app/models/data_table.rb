@@ -1,8 +1,19 @@
 class DataTable
-  attr_reader :name, :columns
-  def initialize(name, columns)
+  def self.all
+    @all ||= {}
+  end
+
+  def self.find_by_name(name)
+    all[name.to_sym]
+  end
+
+  attr_reader :name, :columns, :new_record_strategy
+
+  def initialize(name, columns, options = {})
     @name = name
     @columns = columns
+    @new_record_strategy = options[:new_record_strategy] || :insert
+    self.class.all[name.to_sym] = self
   end
 
   def class_name

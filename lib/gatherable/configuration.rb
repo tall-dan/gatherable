@@ -4,12 +4,12 @@ module Gatherable
     attr_accessor :global_identifier
     attr_writer :schema_name, :auth_method
 
-    def data_point(name, data_type)
-      data_tables << DataTable.new(name, {name => data_type})
+    def data_point(name, data_type, options = {})
+      data_tables << DataTable.new(name, {name => data_type}, options)
     end
 
-    def data_table(name, columns)
-      data_tables << DataTable.new(name, columns)
+    def data_table(name, columns, options = {})
+      data_tables << DataTable.new(name, columns, options)
     end
 
     def data_tables

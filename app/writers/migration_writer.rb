@@ -64,7 +64,7 @@ class CreateGatherable#{data_table.name.to_s.classify} < ActiveRecord::Migration
     create_table '#{table_name}', :primary_key => '#{data_table.name}_id' do |t|
       #{migration_columns}
       t.string :#{Gatherable.config.global_identifier}, :index => true
-      t.timestamps :null => false
+      #{timestamp_column}
     end
   end
 
@@ -79,6 +79,14 @@ end
     data_table.columns.inject("") do |columns, (name, type)|
       non_null = ", :null => false" if name == data_table.name
       columns << "t.#{type} :#{name}#{non_null}\n"
+    end
+  end
+
+  def timestamp_column
+    if data_table.new_record_strategy == :insert
+      't.datetime :created_at, :null => false'
+    else
+      't.timestamps :null => false'
     end
   end
 
