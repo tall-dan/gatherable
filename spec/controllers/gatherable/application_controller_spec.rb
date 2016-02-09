@@ -16,56 +16,94 @@ describe 'Gatherable::PricesController' do
       end
 
       it 'creates an object' do
-        expect(Gatherable::Price).to receive(:create!).with(model_params)
+        expect(model_class).to receive(:create!).with(model_params)
         do_post({:price => model_params })
       end
 
       it "contains all attributes of the model" do
-        allow(Gatherable::Price).to receive(:create!).with(model_params).and_return(price)
         do_post(passed_params)
-        Gatherable::Price.column_names.each do |attr|
+        model_class.column_names.each do |attr|
           expect(json_response.keys).to include(attr)
         end
       end
 
-      it "returns the saved values created model" do
-        allow(Gatherable::Price).to receive(:create!).with(model_params).and_return(price)
+      it "returns the saved values of the created model" do
         do_post(passed_params)
-        Gatherable::Price.column_names.each do |attr|
-          expect(json_response[attr]).to eql model_params[attr]
+        model_params.each do |(attr, val)|
+          expect(json_response[attr]).to eql val
         end
       end
 
+      it 'adds a timestamp to the record' do
+        do_post(passed_params)
+        expect(json_response['created_at']).to_not be_nil
+      end
+
       specify 'the object created is valid' do
-        allow(Gatherable::Price).to receive(:create!).with(model_params).and_return(price)
         do_post(passed_params)
         expect(price).to be_valid
       end
 
       specify 'status is 201' do
-        allow(Gatherable::Price).to receive(:create!).with(model_params).and_return(price)
         do_post(passed_params)
         expect(response.status).to eql 201
+      end
+
+      context 'new_record_strategy = :update' do
+        before do
+          allow(DataTable.find_by_name(model_name)).to receive(:new_record_strategy).and_return :update
+        end
+
+        context 'updating existing record' do
+          let!(:existing_record) { model_class.create(model_name => '76', :session_id => 'session_id123') }
+
+          it 'sets correct values' do
+            do_post(passed_params)
+            existing_record.reload
+            model_params.each do |(attr, val)|
+              expect(existing_record.send(attr).to_s).to eql val
+            end
+          end
+
+          it 'does not create a new record' do
+            expect{do_post(passed_params)}.to_not change{model_class.count}
+          end
+        end
+
+        context 'creating new record' do
+          it 'creates a valid record' do
+            expect{do_post(passed_params)}.to change{model_class.count}.by 1
+          end
+        end
+
+        specify 'status is 200' do
+          do_post(passed_params)
+          expect(response.status).to eql 200
+        end
       end
     end
 
     context 'correct param format' do
+      let(:model_name) { :price }
+      let(:model_class) { DataTable.find_by_name(model_name).classify }
       let(:model_params) { { "price" => "3.0"} }
       let(:passed_params) { {:price => model_params} }
-      let(:price) { Gatherable::Price.new(model_params.merge(:session_id => 'session_id123')) }
+      let(:price) { model_class.new(model_params.merge(:session_id => 'session_id123')) }
       it_behaves_like 'successful object creation'
     end
 
     context 'auth_method set' do
       let(:model_params) { { "price" => "3.0"} }
       let(:passed_params) { {:price => model_params} }
+      let(:model_name) { :price }
+      let(:model_class) { DataTable.find_by_name(model_name).classify }
       context 'session identifier matches passed identifier' do
         before do
           allow(Gatherable.config).to receive(:auth_method) { :session }
           session[:session_id] = 'session_id123'
           allow_any_instance_of(@controller.class).to receive(:session) { session } #boo any_instance
         end
-        let(:price) { Gatherable::Price.new(model_params.merge(:session_id => 'session_id123')) }
+        let(:price) { model_class.new(model_params.merge(:session_id => 'session_id123')) }
         it_behaves_like 'successful object creation'
       end
 
@@ -99,10 +137,12 @@ describe 'Gatherable::PricesController' do
       end
 
       context 'required params + junk params given' do
+        let(:model_name) { :price }
+        let(:model_class) { DataTable.find_by_name(model_name).classify }
         let(:model_params) { { "price" => "3.0"} }
         let(:junk_params) { { 'yolo' => 'swag' } }
         let(:passed_params) { {:price => model_params.merge(junk_params)}.merge(junk_params) }
-        let(:price) { Gatherable::Price.new(model_params.merge(:session_id => 'session_id123')) }
+        let(:price) { model_class.new(model_params.merge(:session_id => 'session_id123')) }
         it_behaves_like 'successful object creation'
       end
     end
@@ -127,7 +167,7 @@ describe 'Gatherable::PricesController' do
 
       it 'returns the record' do
         expect(json_response).to eql \
-        ({"price_id"=>nil, "price"=>"3.0", "session_id" => nil, "created_at"=>nil, "updated_at"=>nil})
+          ({"price_id"=>nil, "price"=>"3.0", "session_id" => nil, "created_at"=>nil})
       end
 
       specify 'the response code is 302' do
