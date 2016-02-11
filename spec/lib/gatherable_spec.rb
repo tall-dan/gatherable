@@ -82,27 +82,36 @@ describe Gatherable do
           expect(routes.map(&:name)).to include name.pluralize
         end
 
-        context 'POST route' do
-          let(:post_route) { routes.find{ |r| r.name == name.pluralize} }
+        context 'generating routes' do
+          let(:create_route) { routes.find{ |r| r.verb == /^POST$/ && r.path.spec.to_s == "/:session_id/#{name.pluralize}(.:format)" } }
+          let(:show_route) { routes.find{ |r| r.verb == /^GET$/ && r.path.spec.to_s == "/:session_id/#{name.pluralize}/:#{name}_id(.:format)" } }
+          let(:index_route) { routes.find{ |r| r.verb == /^GET$/ && r.path.spec.to_s == "/:session_id/#{name.pluralize}(.:format)" } }
+          let(:update_route) { routes.find{ |r| r.verb == /^PUT$/ && r.path.spec.to_s == "/:session_id/#{name.pluralize}/:#{name}_id(.:format)" } }
+          let(:patch_route) { routes.find{ |r| r.verb == /^PATCH$/ && r.path.spec.to_s == "/:session_id/#{name.pluralize}/:#{name}_id(.:format)" } }
+          let(:delete_route) { routes.find{ |r| r.verb == /^DELETE$/ && r.path.spec.to_s == "/:session_id/#{name.pluralize}/:#{name}_id(.:format)" } }
 
-          it 'creates a POST route' do
-            expect(post_route.verb).to eql(/^POST$/)
+          specify 'for create' do
+            expect(create_route).to_not be_nil
           end
 
-          it 'creates the correct path' do
-            expect(post_route.path.spec.to_s).to eql "/:session_id/#{name.pluralize}(.:format)"
-          end
-        end
-
-        context 'GET route' do
-          let(:get_route) { routes.find{ |r| r.name == name} }
-
-          it 'creates a GET route' do
-            expect(get_route.verb).to eql(/^GET$/)
+          specify 'for show' do
+            expect(show_route).to_not be_nil
           end
 
-          it 'creates the correct path' do
-            expect(get_route.path.spec.to_s).to eql "/:session_id/#{name.pluralize}/:#{name}_id(.:format)"
+          specify 'for index' do
+            expect(index_route).to_not be_nil
+          end
+
+          specify 'for update' do
+            expect(update_route).to_not be_nil
+          end
+
+          specify 'for patch' do
+            expect(patch_route).to_not be_nil
+          end
+
+          specify 'for delete' do
+            expect(delete_route).to_not be_nil
           end
         end
       end
