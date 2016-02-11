@@ -10,7 +10,8 @@ describe GatherableGenerator, :type => :generator do
   it 'creates initializer' do
     generator = described_class.new(['initializer'])
     allow(described_class).to receive(:new) { generator }
-    expect(generator).to receive(:copy_file).with('gatherable.rb', 'config/initializers/gatherable.rb')
+    expect(generator).to receive(:copy_file).with('lib/generators/gatherable/templates/gatherable.rb',
+                                                  'config/initializers/gatherable.rb')
     Rails::Generators.invoke('gatherable', ['initializer'])
   end
 
@@ -85,7 +86,8 @@ end
     context 'setup' do
       it 'copies application controller' do
         allow(Gatherable.config).to receive(:data_tables) { [] }
-        expect(generator).to receive(:copy_file).with('application_controller.rb', 'app/controllers/gatherable/application_controller.rb')
+        expect(generator).to receive(:copy_file).with('app/controllers/gatherable/application_controller.rb',
+                                                      'app/controllers/gatherable/application_controller.rb')
         Rails::Generators.invoke('gatherable', ['controllers'])
       end
     end
@@ -127,7 +129,7 @@ var Price = {
     });
   }
 }
-        content
+      content
     end
     let(:generator_target) { 'javascripts' }
     it_behaves_like 'creating a file'
