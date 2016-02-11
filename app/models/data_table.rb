@@ -7,12 +7,13 @@ class DataTable
     all[name.to_sym]
   end
 
-  attr_reader :name, :columns, :new_record_strategy
+  attr_reader :name, :columns, :new_record_strategy, :allowed_controller_actions
 
   def initialize(name, columns, options = {})
     @name = name
     @columns = columns
     @new_record_strategy = options[:new_record_strategy] || :insert
+    @allowed_controller_actions = (options[:allowed_controller_actions] || legacy_controller_actions).map(&:to_s)
     self.class.all[name.to_sym] = self
   end
 
@@ -34,5 +35,11 @@ class DataTable
   def controllerify
     return Gatherable.const_get(controller_name) if Gatherable.const_defined?(controller_name)
     Gatherable.const_set(controller_name, Class.new(Gatherable::ApplicationController))
+  end
+
+  private
+
+  def legacy_controller_actions
+    %w[show create]
   end
 end
