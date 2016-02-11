@@ -1,1 +1,0 @@
-../../../../app/controllers/gatherable/application_controller.rb
