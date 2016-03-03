@@ -7,13 +7,15 @@ class DataTable
     all[name.to_sym]
   end
 
-  attr_reader :name, :columns, :new_record_strategy, :allowed_controller_actions
+  attr_reader :name, :columns, :new_record_strategy, :allowed_controller_actions,
+    :prefix_routes_with_global_id
 
   def initialize(name, columns, options = {})
     @name = name
     @columns = columns
     @new_record_strategy = options[:new_record_strategy] || :insert
     @allowed_controller_actions = (options[:allowed_controller_actions] || legacy_controller_actions).map(&:to_s)
+    @prefix_routes_with_global_id = options[:prefix_routes_with_global_id]
     self.class.all[name.to_sym] = self
   end
 

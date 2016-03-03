@@ -6,7 +6,7 @@ describe Gatherable do
     context 'data tables' do
       context 'saving data tables' do
         it 'saves data tables' do
-          expect(Gatherable.config.data_tables.count).to eql 2
+          expect(Gatherable.config.data_tables.count).to eql DataTable.all.keys.count
         end
 
         it 'saves data tables as data with correct name' do
@@ -67,12 +67,6 @@ describe Gatherable do
     context 'routes' do
       let(:routes) { Gatherable::Engine.routes.routes }
 
-      it 'prefixes route with global identifier' do
-        routes.each do |r|
-          expect(r.path.spec.to_s).to match(/^\/:session_id\//)
-        end
-      end
-
       Gatherable.config.data_tables.map(&:name).map(&:to_s).each do |name|
         it "creates a named path for #{name}" do
           expect(routes.map(&:name)).to include name
@@ -83,12 +77,13 @@ describe Gatherable do
         end
 
         context 'generating routes' do
-          let(:create_route) { routes.find{ |r| r.verb == /^POST$/ && r.path.spec.to_s == "/:session_id/#{name.pluralize}(.:format)" } }
-          let(:show_route) { routes.find{ |r| r.verb == /^GET$/ && r.path.spec.to_s == "/:session_id/#{name.pluralize}/:#{name}_id(.:format)" } }
-          let(:index_route) { routes.find{ |r| r.verb == /^GET$/ && r.path.spec.to_s == "/:session_id/#{name.pluralize}(.:format)" } }
-          let(:update_route) { routes.find{ |r| r.verb == /^PUT$/ && r.path.spec.to_s == "/:session_id/#{name.pluralize}/:#{name}_id(.:format)" } }
-          let(:patch_route) { routes.find{ |r| r.verb == /^PATCH$/ && r.path.spec.to_s == "/:session_id/#{name.pluralize}/:#{name}_id(.:format)" } }
-          let(:delete_route) { routes.find{ |r| r.verb == /^DELETE$/ && r.path.spec.to_s == "/:session_id/#{name.pluralize}/:#{name}_id(.:format)" } }
+          let(:route_prefix) { Gatherable.config.prefixed_resources.include?(name.to_sym) ? ':session_id/' : '' }
+          let(:create_route) { routes.find{ |r| r.verb == /^POST$/ && r.path.spec.to_s == "/#{route_prefix}#{name.pluralize}(.:format)" } }
+          let(:show_route) { routes.find{ |r| r.verb == /^GET$/ && r.path.spec.to_s == "/#{route_prefix}#{name.pluralize}/:#{name}_id(.:format)" } }
+          let(:index_route) { routes.find{ |r| r.verb == /^GET$/ && r.path.spec.to_s == "/#{route_prefix}#{name.pluralize}(.:format)" } }
+          let(:update_route) { routes.find{ |r| r.verb == /^PUT$/ && r.path.spec.to_s == "/#{route_prefix}#{name.pluralize}/:#{name}_id(.:format)" } }
+          let(:patch_route) { routes.find{ |r| r.verb == /^PATCH$/ && r.path.spec.to_s == "/#{route_prefix}#{name.pluralize}/:#{name}_id(.:format)" } }
+          let(:delete_route) { routes.find{ |r| r.verb == /^DELETE$/ && r.path.spec.to_s == "/#{route_prefix}#{name.pluralize}/:#{name}_id(.:format)" } }
 
           specify 'for create' do
             expect(create_route).to_not be_nil
