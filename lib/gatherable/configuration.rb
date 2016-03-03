@@ -21,7 +21,25 @@ module Gatherable
     end
 
     def auth_method
-      @auth_method
+      @auth_method || :session
+    end
+
+    def prefixed_resources
+      @prefixed_resources ||= []
+    end
+
+    def prefixed_resources=(resources)
+      all_table_names = DataTable.all.keys
+      @prefixed_resources = case resources
+      when String, Symbol, Array
+        Array(resources).map(&:to_sym) && all_table_names
+      when Hash
+        if resources.key?(:only)
+          Array(resources[:only]).map(&:to_sym) && all_table_names
+        elsif resources.key?(:except)
+          all_table_names - Array(resources[:except]).map(&:to_sym)
+        end
+      end
     end
   end
 end

@@ -1,20 +1,21 @@
 module Gatherable
   class ApplicationController < ::ActionController::Base
-    before_action :authenticate, only: [:create]
+    before_action :set_gatherable_id
+    before_action :authenticate
 
     def index
-      render :json => model_class.where(global_identifier => global_identifier), :status => :found
+      render :json => model_class.where(global_id => global_id_val), :status => :found
     end
 
     def show
-      render :json => model_instance, :status => :found
+      render :json => model_class.find_by!(global_id => global_id_val, model_id => params[model_id]), :status => :found
     rescue ActiveRecord::RecordNotFound => e
       render :json => { :errors => e.message}, :status => :not_found
     end
 
     def create
       if data_table.new_record_strategy == :update
-        model = model_class.find_or_initialize_by(global_identifier => model_params[global_identifier])
+        model = model_class.find_or_initialize_by(global_id => global_id_val)
         model.update_attributes(model_params)
         render :json => model, :status => :ok
       else
@@ -44,11 +45,12 @@ module Gatherable
 
     def authenticate
       return unless Gatherable.config.auth_method == :session
-      head :unauthorized unless params[global_identifier] == session[global_identifier]
+      return unless requires_global_id_param?
+      head :unauthorized unless params[global_id] == session[global_id]
     end
 
     def model_instance
-      model_class.find_by!(params.slice(model_id, global_identifier))
+      model_class.find_by!(params.slice(model_id, global_id_val))
     end
 
     def model_class
@@ -73,16 +75,28 @@ module Gatherable
 
     def model_params
       params.require(model_name_as_var).permit(
-        *model_class.column_names
-      ).merge(global_identifier => params[global_identifier])
+        *model_class.column_names - [global_id]
+      ).merge(global_id => global_id_val)
     end
 
-    def global_identifier
+    def global_id
       Gatherable.config.global_identifier
     end
 
     def data_table
       DataTable.find_by_name(model_name_as_var)
+    end
+
+    def set_gatherable_id
+      session[global_id] ||= SecureRandom.urlsafe_base64
+    end
+
+    def global_id_val
+      requires_global_id_param? ? params[global_id] : session[global_id]
+    end
+
+    def requires_global_id_param?
+      Gatherable.config.prefixed_resources.include? data_table.name
     end
   end
 end
