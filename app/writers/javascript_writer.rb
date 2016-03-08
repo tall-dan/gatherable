@@ -12,18 +12,22 @@ class JavascriptWriter
       return
     end
     File.open(javascript_class, 'w') do |f|
+      if Gatherable.config.prefixed_resources.include?(data_table.name)
+        function_arg = 'global_identifier, '
+        path_arg = ' + global_identifier + /'
+      end
       f.puts <<-class
 var #{data_table.class_name} = {
-  create: function(global_identifier, options){
+  create: function(#{function_arg}options){
     $.ajax({
-      url: '/gatherable/' + global_identifier + '/#{data_table.name.to_s.pluralize}',
+      url: '/gatherable/#{path_arg}#{data_table.name.to_s.pluralize}',
       method: 'POST',
       data: { #{data_table.name}: options }
     });
   },
   get: function(global_identifier, id) {
     $.ajax({
-      url: '/gatherable/' + global_identifier + '/#{data_table.name}/' + options[#{data_table.name}_id]
+      url: '/gatherable/#{path_arg}#{data_table.name}/' + options[#{data_table.name}_id]
     });
   }
 }

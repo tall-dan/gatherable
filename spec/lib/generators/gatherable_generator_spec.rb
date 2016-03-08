@@ -116,16 +116,16 @@ end
     let(:file_content) do
       <<-content
 var Price = {
-  create: function(global_identifier, options){
+  create: function(options){
     $.ajax({
-      url: '/gatherable/' + global_identifier + '/prices',
+      url: '/gatherable/prices',
       method: 'POST',
       data: { price: options }
     });
   },
   get: function(global_identifier, id) {
     $.ajax({
-      url: '/gatherable/' + global_identifier + '/price/' + options[price_id]
+      url: '/gatherable/price/' + options[price_id]
     });
   }
 }
