@@ -13,7 +13,11 @@ class DataTable
     @name = name
     @columns = columns
     @new_record_strategy = options[:new_record_strategy] || :insert
-    @allowed_controller_actions = (options[:allowed_controller_actions] || legacy_controller_actions).map(&:to_s)
+    if options[:allowed_controller_actions].present?
+      @allowed_controller_actions = Array(options[:allowed_controller_actions]).map(&:to_sym)
+    else
+      @allowed_controller_actions = legacy_controller_actions
+    end
     self.class.all[name.to_sym] = self
   end
 
@@ -40,6 +44,6 @@ class DataTable
   private
 
   def legacy_controller_actions
-    %w[show create]
+    [:show, :create]
   end
 end

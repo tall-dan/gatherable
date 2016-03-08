@@ -3,7 +3,7 @@ require 'rails_helper'
 describe 'Gatherable::PricesController', :type => :request do
 
   let(:data_table) { Gatherable.config.data_tables.first }
-  let(:model_name) { data_table.name }
+  let(:model_name) { data_table.name.to_s }
   let(:model_class) { data_table.classify }
   let(:controller_class) { data_table.controllerify }
   let(:global_id) { 'session_id123' }
