@@ -74,9 +74,20 @@ module Gatherable
     end
 
     def model_params
-      params.require(model_name_as_var).permit(
-        *model_class.column_names - [global_id]
+      scalar_vals = params.require(model_name_as_var).permit(
+        *model_class.column_names - [global_id] - non_scalar_model_params
       ).merge(global_id => global_id_val)
+      non_scalar_vals = non_scalar_model_params.each_with_object(Hash.new) do |attr, vals|
+        vals[attr] = params[model_name_as_var][attr]
+      end
+      non_scalar_vals.merge(scalar_vals)
+    end
+
+    def non_scalar_model_params
+      columns = model_class.columns_hash.select do |_column_name, column_attributes|
+        column_attributes.sql_type == 'json'
+      end
+      columns.keys
     end
 
     def global_id
