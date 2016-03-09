@@ -33,7 +33,7 @@ describe 'Gatherable::PricesController', :type => :request do
 
   before do
     allow(SecureRandom).to receive(:urlsafe_base64) { global_id }
-    allow(data_table).to receive(:allowed_controller_actions) { [:show, :index, :create, :update, :destroy] }
+    allow(data_table).to receive(:controller_actions) { [:show, :index, :create, :update, :destroy] }
     @controller = controller_class.new
   end
 
@@ -412,7 +412,7 @@ describe 'Gatherable::PricesController', :type => :request do
       let(:params) { {} }
 
       before do
-        allow(data_table).to receive(:allowed_controller_actions).and_return(all_actions - [disallowed_action])
+        allow(data_table).to receive(:controller_actions).and_return(all_actions - [disallowed_action])
         Gatherable::RouteDrawer.draw
       end
 
@@ -421,7 +421,7 @@ describe 'Gatherable::PricesController', :type => :request do
       end
 
       after do
-        allow(data_table).to receive(:allowed_controller_actions) { all_actions }
+        allow(data_table).to receive(:controller_actions) { all_actions }
         Gatherable::RouteDrawer.draw
       end
     end

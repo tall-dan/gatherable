@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    gatherable (2.0.1)
+    gatherable (2.0.2)
       rails (~> 4.0)
 
 GEM

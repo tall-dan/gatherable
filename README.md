@@ -122,7 +122,7 @@ Valid keys and values are outlined below.
     exists a record with the same global id. Yes? update it. No? insert
   * defaults to `:insert`
   * see [below](#saving-some-space) for more information
-* `:allowed_controller_actions` - an array containing any of the following:
+* `:controller_actions` - an array containing any of the following:
   * `index`
   * `show`
   * `create`
@@ -132,7 +132,7 @@ Valid keys and values are outlined below.
 
 The configuration also has additional options, enumerated below
 
-*  `prefixed_resources` - 
+*  `prefixed_resources` -
   Gatherable ties data points together using your `global_identifier`.
 Adding a resource (data point) to the `prefixed_resources` array means
 that the routes for that resources will all start with the
