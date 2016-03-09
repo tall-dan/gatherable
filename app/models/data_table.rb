@@ -8,11 +8,13 @@ class DataTable
   end
 
   attr_reader :name, :columns, :new_record_strategy, :allowed_controller_actions
+  alias controller_actions allowed_controller_actions
 
   def initialize(name, columns, options = {})
     @name = name
     @columns = columns
     @new_record_strategy = options[:new_record_strategy] || :insert
+    options[:allowed_controller_actions] ||= options[:controller_actions]
     if options[:allowed_controller_actions].present?
       @allowed_controller_actions = Array(options[:allowed_controller_actions]).map(&:to_sym)
     else
