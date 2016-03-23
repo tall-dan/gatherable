@@ -2,8 +2,11 @@ namespace :db do
   ROLE='gatherable'
   task :prepare do
     require 'rails/generators'
+    old_dir = Dir.pwd
+    Dir.chdir(Rails.root)
     Rails::Generators.invoke('gatherable', ['migrations'])
     ActiveRecord::Migrator.migrate "db/migrate"
+    Dir.chdir(old_dir)
   end
 
   task :setup do
