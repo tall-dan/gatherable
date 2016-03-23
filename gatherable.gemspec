@@ -22,6 +22,9 @@ Gem::Specification.new do |s|
   s.add_development_dependency 'pg', '~> 0.18'
   s.add_development_dependency 'pry', '~> 0.10'
   s.add_development_dependency 'rake', '~> 10.0'
+  s.add_development_dependency 'cucumber-rails', '~> 1.4'
+  s.add_development_dependency 'database_cleaner', '~> 1.5'
+  s.add_development_dependency 'poltergeist', '~> 1.6'
   s.add_development_dependency 'rspec-rails', '~> 3.0'
   s.add_development_dependency 'codeclimate-test-reporter', '0.4.8'
 end

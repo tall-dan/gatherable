@@ -34,8 +34,7 @@ class GatherableGenerator < Rails::Generators::NamedBase
   end
 
   def generate_javascripts
-    Gatherable.config.data_tables.each do |data_table|
-      JavascriptWriter.new(data_table).write
-    end
+    copy_file "lib/generators/gatherable/templates/gatherable.js",
+      "app/assets/javascripts/gatherable.js"
   end
 end

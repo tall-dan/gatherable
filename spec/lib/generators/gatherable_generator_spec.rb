@@ -15,6 +15,14 @@ describe GatherableGenerator, :type => :generator do
     Rails::Generators.invoke('gatherable', ['initializer'])
   end
 
+  it 'creates javascript model' do
+    generator = described_class.new(['javascripts'])
+    allow(described_class).to receive(:new) { generator }
+    expect(generator).to receive(:copy_file).with('lib/generators/gatherable/templates/gatherable.js',
+                                               'app/assets/javascripts/gatherable.js')
+    Rails::Generators.invoke('gatherable', ['initializer'])
+  end
+
 
   shared_examples_for 'creating a file' do
     let!(:generator) { described_class.new([generator_target]) }
@@ -107,31 +115,6 @@ end
       content
     end
     let(:generator_target) { 'models' }
-    it_behaves_like 'creating a file'
-  end
-
-  context 'javascript classes' do
-    let(:file_destination) { 'app/assets/javascripts/gatherable' }
-    let(:output_file) { File.join(Rails.root, file_destination, '/prices.js') }
-    let(:file_content) do
-      <<-content
-var Price = {
-  create: function(options){
-    $.ajax({
-      url: '/gatherable/prices',
-      method: 'POST',
-      data: { price: options }
-    });
-  },
-  get: function(global_identifier, id) {
-    $.ajax({
-      url: '/gatherable/price/' + options[price_id]
-    });
-  }
-}
-      content
-    end
-    let(:generator_target) { 'javascripts' }
     it_behaves_like 'creating a file'
   end
 end
