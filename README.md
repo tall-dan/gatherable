@@ -65,7 +65,7 @@ like this:
 ```
 Rails.application.routes.draw do
   #whatever routes your app already has
-  mount Gatherable::Engine => "/gatherable"`
+  mount Gatherable::Engine => "/gatherable"
 end
 ```
 
