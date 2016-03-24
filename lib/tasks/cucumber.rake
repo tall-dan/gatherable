@@ -12,13 +12,6 @@ begin
   require 'cucumber/rake/task'
 
   namespace :cucumber do
-    task :prepare do
-      require 'rails/generators'
-      old_dir = Dir.pwd
-      Dir.chdir(Rails.root)
-      Rails::Generators.invoke('gatherable', ['javascripts'])
-      Dir.chdir(old_dir)
-    end
     Cucumber::Rake::Task.new({:ok => 'test:prepare'}, 'Run features that should pass') do |t|
       t.fork = true # You may get faster startup if you set this to false
       t.profile = 'default'

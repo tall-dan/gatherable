@@ -95,6 +95,24 @@ specific param format, like so:
 { data_point_name: { attr_1: 'foo', attr_2: 'bar' } }
 ```
 
+#### Use the given js file
+Add the following line to your `application.js` file:
+```
+  //= require gatherable
+```
+This gives you a js object that makes ajax calls to the routes mentioned
+above. The method signatures look like this:
+```
+  create: function(gatherableVar, options, globalIdentifier = null)
+  show: function(gatherableVar, id, globalIdentifier = null)
+  update: function(gatherableVar, id, options, globalIdentifier = null)
+  index: function(gatherableVar, globalIdentifier = null)
+  destroy: function(gatherableVar, id, globalIdentifier = null)
+
+  # gatherableVar - the name of the data point / table
+  # options a {column_name: value} js object
+  # globalIdentifier: needed if you've explicitly made it a part of your routes (see prefixed_resources, below)
+```
 ### Seeing the magic
 
 If you want to customize the models or controllers that Gatherable
@@ -103,12 +121,6 @@ dynamically defines, simply generate them:
 ```
 rails generate gatherable models
 rails generate gatherable controllers
-```
-
-You can also generate simple javascript objects to talk to your
-controllers:
-
-```
 rails generate gatherable javascripts
 ```
 

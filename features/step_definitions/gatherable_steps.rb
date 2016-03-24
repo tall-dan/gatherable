@@ -68,6 +68,9 @@ end
 
 Then(/^the object will be updateed$/) do
   wait_for_ajax
+  puts "looking for #{@price}"
+  puts "have"
+  puts @data_table.classify.all.map(&:price)
   expect(@data_table.classify.where(@data_table.name => @price)).to_not be_empty
 end
 

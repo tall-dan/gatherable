@@ -1,0 +1,1 @@
+../../../lib/generators/gatherable/templates/gatherable.js

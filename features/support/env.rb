@@ -14,7 +14,6 @@ require File.expand_path("../../../spec/dummy/config/environments/test.rb",  __F
 
 Rails.application.load_tasks
 Rake::Task['db:prepare'].invoke
-Rake::Task['cucumber:prepare'].invoke
 
 # Capybara defaults to CSS3 selectors rather than XPath.
 # If you'd prefer to use XPath, just uncomment this line and adjust any
@@ -58,5 +57,5 @@ end
 at_exit do
   js_file = File.join(Rails.root, 'app', 'assets', 'javascripts', 'gatherable.js')
   File.delete(js_file) if File.exists?(js_file)
-  FileUtils.rm_rf('db/migrate')
+  FileUtils.rm_rf(File.join(Rails.root, 'db/migrate'))
 end
