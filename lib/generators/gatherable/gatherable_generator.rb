@@ -34,7 +34,7 @@ class GatherableGenerator < Rails::Generators::NamedBase
   end
 
   def generate_javascripts
-    copy_file "lib/generators/gatherable/templates/gatherable.js",
+    copy_file "app/assets/javascripts/gatherable.js",
       "app/assets/javascripts/gatherable.js"
   end
 end

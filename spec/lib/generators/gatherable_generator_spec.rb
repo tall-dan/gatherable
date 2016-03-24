@@ -18,7 +18,7 @@ describe GatherableGenerator, :type => :generator do
   it 'creates javascript model' do
     generator = described_class.new(['javascripts'])
     allow(described_class).to receive(:new) { generator }
-    expect(generator).to receive(:copy_file).with('lib/generators/gatherable/templates/gatherable.js',
+    expect(generator).to receive(:copy_file).with('app/assets/javascripts/gatherable.js',
                                                'app/assets/javascripts/gatherable.js')
     Rails::Generators.invoke('gatherable', ['initializer'])
   end
