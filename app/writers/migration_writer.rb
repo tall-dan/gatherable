@@ -50,7 +50,7 @@ end
   end
 
   def self.schema_migration
-    "db/migrate/#{unique_timestamp}_create_gatherable_schema.rb"
+    @schema_migration ||= "db/migrate/#{unique_timestamp}_create_gatherable_schema.rb"
   end
 
   def table_name
